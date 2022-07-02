@@ -103,6 +103,55 @@ def detect_cv2_camera(cfgfile, weightfile):
 
     cap.release()
 
+def detect_cv2_video(cfgfile, weightfile, imgfile):
+    import cv2
+    m = Darknet(cfgfile)
+
+    m.print_network()
+    if args.torch:
+        m.load_state_dict(torch.load(weightfile))
+    else:
+        m.load_weights(weightfile)
+    print('Loading weights from %s... Done!' % (weightfile))
+
+    if use_cuda:
+        m.cuda()
+
+    # cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(imgfile)
+    cap.set(3, 1280)
+    cap.set(4, 720)
+    print("Starting the YOLO loop...")
+
+    num_classes = m.num_classes
+    if num_classes == 20:
+        namesfile = 'data/voc.names'
+    elif num_classes == 80:
+        namesfile = 'data/coco.names'
+    else:
+        namesfile = 'data/x.names'
+    class_names = load_class_names(namesfile)
+
+    i = 0
+    while True:
+        ret, img = cap.read()
+        if img is None:
+            return
+        sized = cv2.resize(img, (m.width, m.height))
+        sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
+
+        start = time.time()
+        boxes = do_detect(m, sized, 0.4, 0.6, use_cuda)
+        finish = time.time()
+        print('Predicted in %f seconds.' % (finish - start))
+
+        result_img = plot_boxes_cv2(img, boxes[0], savename=f'prediction1.jpg', class_names=class_names)
+        cv2.VideoWriter('prediction.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, ())
+        i += 1
+        # cv2.imshow('Yolo demo', result_img)
+        cv2.waitKey(1)
+
+    cap.release()
 
 def detect_skimage(cfgfile, weightfile, imgfile):
     from skimage import io
@@ -154,11 +203,16 @@ def get_args():
 
     return args
 
+def isvideo(fileName:str):
+    return fileName.endswith(('mp4', 'mkv', 'mov', 'avi', 'rmvb'))
 
 if __name__ == '__main__':
     args = get_args()
     if args.imgfile:
-        detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
+        if isvideo(args.imgfile):
+            detect_cv2_video(args.cfgfile, args.weightfile, args.imgfile)
+        else:
+            detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
         # detect_imges(args.cfgfile, args.weightfile)
         # detect_cv2(args.cfgfile, args.weightfile, args.imgfile)
         # detect_skimage(args.cfgfile, args.weightfile, args.imgfile)
