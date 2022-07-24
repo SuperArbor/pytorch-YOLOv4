@@ -133,11 +133,18 @@ def detect_cv2_video(cfgfile, weightfile, imgfile):
     class_names = load_class_names(namesfile)
 
     i = 0
+
+    video_width = int(cap.get(3))
+    video_height = int(cap.get(4))
+    video_fps = int(cap.get(5))
+    f = cv2.VideoWriter_fourcc(*'mp4v')     #VideoWriter_fourcc为视频编解码器
+    
+    videoWriter = cv2.VideoWriter('prediction.mp4', f, video_fps, (video_width, video_height))
     while True:
-        ret, img = cap.read()
-        if img is None:
+        ret, frame = cap.read()
+        if not ret:
             return
-        sized = cv2.resize(img, (m.width, m.height))
+        sized = cv2.resize(frame, (m.width, m.height))
         sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
 
         start = time.time()
@@ -145,10 +152,10 @@ def detect_cv2_video(cfgfile, weightfile, imgfile):
         finish = time.time()
         print('Predicted in %f seconds.' % (finish - start))
 
-        result_img = plot_boxes_cv2(img, boxes[0], savename=f'prediction1.jpg', class_names=class_names)
-        cv2.VideoWriter('prediction.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, ())
+        result_frame = plot_boxes_cv2(frame, boxes[0], savename=f'prediction1.jpg', class_names=class_names)
+        videoWriter.write(result_frame)
         i += 1
-        # cv2.imshow('Yolo demo', result_img)
+        # cv2.imshow('Yolo demo', result_frame)
         cv2.waitKey(1)
 
     cap.release()
