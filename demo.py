@@ -152,7 +152,7 @@ def detect_cv2_video(cfgfile, weightfile, imgfile):
         finish = time.time()
         print('Predicted in %f seconds.' % (finish - start))
 
-        result_frame = plot_boxes_cv2(frame, boxes[0], savename=f'prediction1.jpg', class_names=class_names)
+        result_frame = plot_boxes_cv2(frame, boxes[0], class_names=class_names)
         videoWriter.write(result_frame)
         i += 1
         # cv2.imshow('Yolo demo', result_frame)
