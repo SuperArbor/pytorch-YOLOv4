@@ -19,3 +19,4 @@ log
 *.json
 data/outcome
 *.mp4
+input/*
