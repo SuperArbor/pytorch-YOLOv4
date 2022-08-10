@@ -242,7 +242,7 @@ def draw_box(img, bboxes):
 class Yolo_dataset(Dataset):
     def __init__(self, label_path, cfg, train=True):
         super(Yolo_dataset, self).__init__()
-        if cfg.mixup == 2:
+        if cfg.mixup == 1:
             print("cutmix=1 - isn't supported for Detector")
             raise
         elif cfg.mixup == 2 and cfg.letter_box:

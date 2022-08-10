@@ -538,8 +538,8 @@ def get_args(**kwargs):
                         help='Learning rate', dest='learning_rate')
     parser.add_argument('-f', '--load', dest='load', type=str, default=None,
                         help='Load model from a .pth file')
-    parser.add_argument('-g', '--gpu', metavar='G', type=str, default='-1',
-                        help='GPU', dest='gpu')
+    # parser.add_argument('-g', '--gpu', metavar='G', type=str, default='-1',
+    #                     help='GPU', dest='gpu')
     parser.add_argument('-dir', '--data-dir', type=str, default=None,
                         help='dataset dir', dest='dataset_dir')
     parser.add_argument('-pretrained', type=str, default=None, help='pretrained yolov4.conv.137')

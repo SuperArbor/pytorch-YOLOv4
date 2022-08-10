@@ -20,6 +20,7 @@ Cfg = EasyDict()
 
 Cfg.use_darknet_cfg = True
 Cfg.cfgfile = os.path.join(_BASE_DIR, 'cfg', 'yolov4.cfg')
+Cfg.gpu = '1,2,3,4'
 
 Cfg.batch = 64
 Cfg.subdivisions = 16
