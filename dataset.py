@@ -138,6 +138,7 @@ def image_data_augmentation(mat, w, h, pleft, ptop, swidth, sheight, flip, dhue,
             if img.shape[2] >= 3:
                 hsv_src = cv2.cvtColor(sized.astype(np.float32), cv2.COLOR_RGB2HSV)  # RGB to HSV
                 hsv = cv2.split(hsv_src)
+                hsv = list(hsv)
                 hsv[1] *= dsat
                 hsv[2] *= dexp
                 hsv[0] += 179 * dhue
@@ -271,7 +272,7 @@ class Yolo_dataset(Dataset):
             return self._get_val_item(index)
         img_path = self.imgs[index]
         bboxes = np.array(self.truth.get(img_path), dtype=np.float)
-        img_path = os.path.join(self.cfg.dataset_dir, img_path)
+        # img_path = os.path.join(self.cfg.dataset_dir, img_path)
         use_mixup = self.cfg.mixup
         if random.randint(0, 1):
             use_mixup = 0
@@ -292,7 +293,7 @@ class Yolo_dataset(Dataset):
             if i != 0:
                 img_path = random.choice(list(self.truth.keys()))
                 bboxes = np.array(self.truth.get(img_path), dtype=np.float)
-                img_path = os.path.join(self.cfg.dataset_dir, img_path)
+                # img_path = os.path.join(self.cfg.dataset_dir, img_path)
             img = cv2.imread(img_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             if img is None:
@@ -429,10 +430,12 @@ def get_image_id(filename:str) -> int:
     # no = f"{int(no):04d}"
     # return int(lv+no)
 
-    print("You could also create your own 'get_image_id' function.")
+    # print("You could also create your own 'get_image_id' function.")
     # print(filename)
     parts = filename.split('/')
-    id = int(parts[-1][0:-4])
+    # id = int(parts[-1][0:-4])
+    last_part = parts[-1].replace('_', '-').split('-')[1]
+    id = int(last_part)
     # print(id)
     return id
 

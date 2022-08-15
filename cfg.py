@@ -20,7 +20,7 @@ Cfg = EasyDict()
 
 Cfg.use_darknet_cfg = True
 Cfg.cfgfile = os.path.join(_BASE_DIR, 'cfg', 'yolov4.cfg')
-Cfg.gpu = '1,2,3,4'
+Cfg.gpu = '3,4'
 
 Cfg.batch = 64
 Cfg.subdivisions = 16
@@ -57,6 +57,7 @@ Cfg.boxes = 60  # box num
 Cfg.TRAIN_EPOCHS = 300
 Cfg.train_label = os.path.join(_BASE_DIR, 'data', 'train.txt')
 Cfg.val_label = os.path.join(_BASE_DIR, 'data' ,'val.txt')
+Cfg.dataset_dir = os.path.join(_BASE_DIR, 'data')
 Cfg.TRAIN_OPTIMIZER = 'adam'
 '''
 image_path1 x1,y1,x2,y2,id x1,y1,x2,y2,id x1,y1,x2,y2,id ...

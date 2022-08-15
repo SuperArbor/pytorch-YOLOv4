@@ -20,3 +20,4 @@ log
 data/outcome
 *.mp4
 input/*
+data/*.txt
