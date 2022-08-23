@@ -19,6 +19,7 @@ import numpy as np
 
 import torch
 from torch.utils.data.dataset import Dataset
+from tool.read_img_path import *
 
 
 def rand_uniform_strong(min, max):
@@ -294,7 +295,8 @@ class Yolo_dataset(Dataset):
                 img_path = random.choice(list(self.truth.keys()))
                 bboxes = np.array(self.truth.get(img_path), dtype=np.float)
                 # img_path = os.path.join(self.cfg.dataset_dir, img_path)
-            img = cv2.imread(img_path)
+            # img = cv2.imread(img_path)
+            img = read_img_path(img_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             if img is None:
                 continue
@@ -392,7 +394,8 @@ class Yolo_dataset(Dataset):
         """
         img_path = self.imgs[index]
         bboxes_with_cls_id = np.array(self.truth.get(img_path), dtype=np.float)
-        img = cv2.imread(os.path.join(self.cfg.dataset_dir, img_path))
+        img = read_img_path(img_path)
+        # img = cv2.imread(os.path.join(self.cfg.dataset_dir, img_path))
         # img_height, img_width = img.shape[:2]
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         # img = cv2.resize(img, (self.cfg.w, self.cfg.h))
@@ -434,7 +437,7 @@ def get_image_id(filename:str) -> int:
     # print(filename)
     parts = filename.split('/')
     # id = int(parts[-1][0:-4])
-    last_part = parts[-1].replace('_', '-').split('-')[1]
+    last_part = parts[-1].replace('_', '-').split('-')[0]
     id = int(last_part)
     # print(id)
     return id
