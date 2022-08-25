@@ -480,7 +480,8 @@ if __name__ == "__main__":
     if use_cuda:
         model.cuda()
 
-    img = cv2.imread(imgfile)
+    img = read_img_path(imgfile)
+    # img = cv2.imread(imgfile)
 
     # Inference input size is 416*416 does not mean training size is the same
     # Training size could be 608*608 or even other sizes

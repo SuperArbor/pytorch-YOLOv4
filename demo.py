@@ -19,6 +19,7 @@ from tool.torch_utils import *
 from tool.darknet2pytorch import Darknet
 import torch
 import argparse
+from tool.read_img_path import read_img_path
 
 """hyper parameters"""
 use_cuda = True
@@ -43,7 +44,8 @@ def detect_cv2(cfgfile, weightfile, imgfile):
         namesfile = 'data/x.names'
     class_names = load_class_names(namesfile)
 
-    img = cv2.imread(imgfile)
+    img = read_img_path(imgfile)
+    # img = cv2.imread(imgfile)
     sized = cv2.resize(img, (m.width, m.height))
     sized = cv2.cvtColor(sized, cv2.COLOR_BGR2RGB)
 
@@ -199,10 +201,11 @@ def get_args():
     parser.add_argument('-cfgfile', type=str, default='./cfg/yolov4.cfg',
                         help='path of cfg file', dest='cfgfile')
     parser.add_argument('-weightfile', type=str,
-                        default='./checkpoints/Yolov4_epoch1.pth',
+                        # default='test.weights',
+                        default='checkpoints/Yolov4_epoch20.pth',
                         help='path of trained model.', dest='weightfile')
     parser.add_argument('-imgfile', type=str,
-                        default='./data/mscoco2017/train2017/190109_180343_00154162.jpg',
+                        default='http://10.115.115.161:8091/1465065960_+00360.jpg',
                         help='path of your image file.', dest='imgfile')
     parser.add_argument('-torch', type=bool, default=False,
                         help='use torch weights')

@@ -10,6 +10,7 @@ import pycuda.driver as cuda
 import pycuda.autoinit
 
 from tool.utils import *
+from tool.read_img_path import read_img_path
 
 try:
     # Sometimes python2 does not understand FileNotFoundError
@@ -123,7 +124,8 @@ def main(engine_path, image_path, image_size):
         IN_IMAGE_H, IN_IMAGE_W = image_size
         context.set_binding_shape(0, (1, 3, IN_IMAGE_H, IN_IMAGE_W))
 
-        image_src = cv2.imread(image_path)
+        # image_src = cv2.imread(image_path)
+        image_src = read_img_path(image_path)
 
         num_classes = 80
 

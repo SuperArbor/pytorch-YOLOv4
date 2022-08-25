@@ -5,6 +5,7 @@ from tensorflow.python.platform import gfile
 
 import cv2
 from tool.utils import post_processing, load_class_names, plot_boxes_cv2
+from tool.read_img_path import read_img_path
 
 
 def demo_tensorflow(tfpb_file="./weight/yolov4.pb", image_path=None, print_sensor_name=False):
@@ -34,7 +35,8 @@ def demo_tensorflow(tfpb_file="./weight/yolov4.pb", image_path=None, print_senso
 
         # image_src = np.random.rand(1, 3, 608, 608).astype(np.float32)  # input image
         # Input
-        image_src = cv2.imread(image_path)
+        # image_src = cv2.imread(image_path)
+        image_src = read_img_path(image_path)
         resized = cv2.resize(image_src, (inp.shape[2], inp.shape[3]), interpolation=cv2.INTER_LINEAR)
         img_in = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
         img_in = np.transpose(img_in, (2, 0, 1)).astype(np.float32)

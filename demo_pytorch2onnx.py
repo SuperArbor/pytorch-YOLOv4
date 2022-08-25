@@ -11,6 +11,7 @@ from tool.utils import *
 from models import Yolov4
 from demo_darknet2onnx import detect
 
+from tool.read_img_path import read_img_path
 
 def transform_to_onnx(weight_file, batch_size, n_classes, IN_IMAGE_H, IN_IMAGE_W):
     
@@ -77,7 +78,8 @@ def main(weight_file, image_path, batch_size, n_classes, IN_IMAGE_H, IN_IMAGE_W)
     # session = onnx.load(onnx_path)
     print("The model expects input shape: ", session.get_inputs()[0].shape)
 
-    image_src = cv2.imread(image_path)
+    # image_src = cv2.imread(image_path)
+    image_src = read_img_path(image_path)
     detect(session, image_src)
 
 
